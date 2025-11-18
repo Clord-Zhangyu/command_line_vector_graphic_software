@@ -95,7 +95,7 @@ public class ModelTest {
         assertEquals("False", Clevis.Execute("intersect testLine testRect"));
         assertEquals("Succeed", Clevis.Execute("move temporary 20 30"));
         assertEquals("Succeed", Clevis.Execute("delete temporary"));
-        assertEquals("Succeed", Clevis.Execute("group myGroup testCircle  testRect"));
+        assertEquals("Succeed", Clevis.Execute("group myGroup testCircle testRect"));
         assertEquals("\"testCircle\" unaccessible.", Clevis.Execute("move testCircle 20 30"));
         assertEquals("False", Clevis.Execute("intersect testSquare myGroup"));
         assertEquals("\"testRect\" unaccessible.", Clevis.Execute("group myGroup1 myGroup testRect"));

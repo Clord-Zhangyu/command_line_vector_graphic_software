@@ -7,23 +7,21 @@ import java.security.KeyException;
 /**
  * The operation object for group command
  */
-public class OpGroup extends OpCreate {
+public class OpGroup extends Create {
 
     /**
      * Construct a group operation to be executed
      *
      * @param name       the name of the group
      * @param collection the collection that should form a group
-     * @throws KeyException thrown when duplicate keys exists
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
     public OpGroup(String name, String[] collection) throws KeyException {
         super(new GeoGroup(name, collection));
         var geo = (GeoGroup) Geo;
         if (geo.GetSons().size() == 1)
             throw new KeyException("one member can not form a group.");
-        for (var son : geo.GetSons()) {
-            if (son.GetParent() != null) throw new KeyException("\"" + son.GetName() + "\" unaccessible.");
-        }
+
     }
 
     @Override

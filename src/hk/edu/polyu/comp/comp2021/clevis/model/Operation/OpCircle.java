@@ -7,7 +7,7 @@ import java.security.KeyException;
 /**
  * The operation object for circle
  */
-public class OpCircle extends OpCreate {
+public class OpCircle extends Create {
     /**
      * Construct a circle operation to be executed
      *
@@ -15,7 +15,7 @@ public class OpCircle extends OpCreate {
      * @param x    the x cordinate of the center
      * @param y    the y cordinate of the center
      * @param r    the radius of the circle
-     * @throws KeyException thrown when duplicate keys exists
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
     public OpCircle(String name, double x, double y, double r) throws KeyException {
         super(new GeoCircle(name, x, y, r));

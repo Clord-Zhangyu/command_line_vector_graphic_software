@@ -68,7 +68,7 @@ public class Logger {
      */
     public void Log(String content) {
         if (content == null) return;
-        if (WriteHtml) {
+        if (WriteHtml)
             try {
                 HtmlLog.write("\t<tr>\n\t\t<td>\n\t\t\t" + Data.GetCommandCount() + "\n\t\t</td>\n\t\t<td>\n\t\t\t" + content + "\n\t\t</td>\n\t</tr>\n");
                 HtmlLog.flush();
@@ -76,7 +76,6 @@ public class Logger {
                 System.out.println("Writing html log failed");
                 WriteHtml = false;
             }
-        }
         if (WriteTxt)
             try {
                 TxtLog.write(content + "\n");

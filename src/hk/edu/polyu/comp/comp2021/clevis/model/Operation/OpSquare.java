@@ -7,7 +7,7 @@ import java.security.KeyException;
 /**
  * The operation object for square command
  */
-public class OpSquare extends OpCreate {
+public class OpSquare extends Create {
     /**
      * Construct a square operation to be executed
      *
@@ -15,7 +15,7 @@ public class OpSquare extends OpCreate {
      * @param x    the x cordinate of the top-left corner
      * @param y    the y cordinate of the top-left corner
      * @param l    the length of the edges
-     * @throws KeyException thrown when duplicate keys exists
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
     public OpSquare(String name, double x, double y, double l) throws KeyException {
         super(new GeoSquare(name, x, y, l));

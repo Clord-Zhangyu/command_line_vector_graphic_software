@@ -5,45 +5,65 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 /**
  * Main controller for the Clevis Geometry System.
  * Handles user interactions and coordinates between view and model.
  */
-public class MainController {
+public class GUI {
     private static final double SCALE_SPEED = 1.1;
     private final MainView view;
     private int lastMouseX;
     private int lastMouseY;
     private boolean isDragging = false;
-
     /**
      * Constructs the main controller and initializes the application.
+     * @param args Boosting parameter
      */
-    public MainController() {
+    public GUI(String[] args) {
         view = new MainView();
         setupEventHandlers();
+        redirectSystemOut();
         view.show();
+        Thread rerunThread = new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ignored) {
+            }
+            Clevis.Boost(args);
+        });
+        Thread updateThread = new Thread(() -> {
+            while (rerunThread.isAlive())
+                view.getDrawingCanvas().repaint();
+        });
+        rerunThread.start();
+        updateThread.start();
+    }
+
+    private void redirectSystemOut() {
+        var outputArea=view.getOutputArea();
+        OutputStream out = new GUIOutputStream(outputArea);
+        PrintStream printStream = new PrintStream(out, true);
+        System.setOut(printStream);
     }
 
     private void setupEventHandlers() {
-        // Command execution
         view.getSendButton().addActionListener(e -> handleCommand());
         view.getCommandInput().addActionListener(e -> handleCommand());
 
-        // Menu items
         view.getExitItem().addActionListener(e -> System.exit(0));
         view.getUndoItem().addActionListener(e -> handleUndo());
         view.getRedoItem().addActionListener(e -> handleRedo());
         view.getAboutItem().addActionListener(e -> handleAbout());
 
-        // Mouse zoom
         view.getDrawingCanvas().addMouseWheelListener(e -> {
-            double zoomFactor = e.getWheelRotation() < 0 ? SCALE_SPEED : 1.0/SCALE_SPEED;
+            double zoomFactor = e.getWheelRotation() < 0 ? SCALE_SPEED : 1.0 / SCALE_SPEED;
             view.getDrawingCanvas().zoom(zoomFactor);
         });
 
-        // Mouse drag panning
         view.getDrawingCanvas().addMouseListener(new CanvasMouseAdapter());
 
         view.getDrawingCanvas().addMouseMotionListener(new MouseAdapter() {
@@ -56,8 +76,8 @@ public class MainController {
                     int deltaY = currentY - lastMouseY;
                     lastMouseX = currentX;
                     lastMouseY = currentY;
-                    double modelDeltaX = deltaX * view.getDrawingCanvas().getPixelScale();
-                    double modelDeltaY = -deltaY * view.getDrawingCanvas().getPixelScale();
+                    double modelDeltaX = deltaX / view.getDrawingCanvas().getPixelScale();
+                    double modelDeltaY = -deltaY / view.getDrawingCanvas().getPixelScale();
                     view.getDrawingCanvas().pan(modelDeltaX, modelDeltaY);
                 }
             }
@@ -111,8 +131,31 @@ public class MainController {
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainController());
-        Clevis.Boost(args);
+        SwingUtilities.invokeLater(() -> new GUI(args));
+    }
+
+    private static class GUIOutputStream extends OutputStream {
+        private final JTextArea outputArea;
+
+        public GUIOutputStream(JTextArea outputArea) {
+            this.outputArea = outputArea;
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            outputArea.append(String.valueOf((char) b));
+            outputArea.setCaretPosition(outputArea.getDocument().getLength());
+        }
+
+        @Override
+        public void write(byte[] b, int off, int len) throws IOException {
+            // 追加字符串到 JTextArea
+            String text = new String(b, off, len);
+            SwingUtilities.invokeLater(() -> {
+                outputArea.append(text);
+                outputArea.setCaretPosition(outputArea.getDocument().getLength());
+            });
+        }
     }
 
     private class CanvasMouseAdapter extends MouseAdapter {

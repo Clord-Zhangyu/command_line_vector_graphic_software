@@ -20,7 +20,7 @@ public class OpMove implements Operation {
      * @param name the name of the object to be moved
      * @param dx   the distance in x coordinate
      * @param dy   the distance in y coordinate
-     * @throws KeyException thrown when duplicate keys exists
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
     public OpMove(String name, double dx, double dy) throws KeyException {
         if (!Data.Geometries.containsKey(name))

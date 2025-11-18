@@ -16,7 +16,7 @@ public class OpBoundingbox implements Query {
      * Contruct a boundingbox query to be executed
      *
      * @param name the name of the geometry
-     * @throws KeyException thrown when duplicate keys exists
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
     public OpBoundingbox(String name) throws KeyException {
         if (!Data.Geometries.containsKey(name))

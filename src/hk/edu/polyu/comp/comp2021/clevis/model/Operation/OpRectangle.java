@@ -7,7 +7,7 @@ import java.security.KeyException;
 /**
  * The operation object for rectangle command
  */
-public class OpRectangle extends OpCreate {
+public class OpRectangle extends Create {
 
     /**
      * Construct a rectangle operation to be executed
@@ -17,7 +17,7 @@ public class OpRectangle extends OpCreate {
      * @param y    the y cordinate of the top-left corner
      * @param w    the width of the rectangle
      * @param h    the height of the rectangle
-     * @throws KeyException thrown when duplicate keys exists
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
     public OpRectangle(String name, double x, double y, double w, double h) throws KeyException {
         super(new GeoRectangle(name, x, y, w, h));

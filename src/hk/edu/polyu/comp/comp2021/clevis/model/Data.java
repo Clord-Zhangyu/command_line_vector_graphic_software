@@ -10,9 +10,13 @@ import java.util.*;
  */
 public class Data {
     /**
-     * All geometries
+     * All geometries indexed by name
      */
-    public static final LinkedHashMap<String, Geometry> Geometries = new LinkedHashMap<>();
+    public static final Map<String, Geometry> Geometries = new HashMap<>();
+    /**
+     * All geometries indexed by z-order
+     */
+    public static final Map<Integer, Geometry> GeometryZOrder = new TreeMap<>();
     /**
      * The undo stack
      */
@@ -22,6 +26,7 @@ public class Data {
      */
     public static final Stack<Operation> RedoStack = new Stack<>();
     private static int CommandCount;
+    private static int ZCount;
 
     /**
      * Get the count for the new command. After executing this the count will be increased automatically
@@ -33,6 +38,12 @@ public class Data {
     }
 
     /**
+     * Get the count for the new geometry. All existed geometry will contribute to this count. After executing this the count will be increased automatically
+     * @return the count of geometry
+     */
+    public static int GetZCount() {return ZCount++;}
+
+    /**
      * Clear all data
      */
     public static void Clear() {
@@ -40,5 +51,6 @@ public class Data {
         UndoStack.clear();
         RedoStack.clear();
         CommandCount = 0;
+        ZCount = 0;
     }
 }

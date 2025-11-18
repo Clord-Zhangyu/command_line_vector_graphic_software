@@ -20,14 +20,14 @@ public class OpListall implements Query {
     public QureyResult Execute() {
         var res = new LinkedHashMap<String, LinkedHashMap<String, Object>>();
         var discription = new StringBuilder();
-        List<Map.Entry<String, Geometry>> entries = new ArrayList<>(Data.Geometries.entrySet());
-        ListIterator<Map.Entry<String, Geometry>> it = entries.listIterator(entries.size());
+        List<Map.Entry<Integer, Geometry>> entries = new ArrayList<>(Data.GeometryZOrder.entrySet());
+        ListIterator<Map.Entry<Integer, Geometry>> it = entries.listIterator(entries.size());
         var first = true;
         while (it.hasPrevious()) {
-            Map.Entry<String, Geometry> entry = it.previous();
+            Map.Entry<Integer, Geometry> entry = it.previous();
             if (entry.getValue().GetParent() != null) continue;
             var info = entry.getValue().GetInfo();
-            res.put(entry.getKey(), info);
+            res.put(entry.getValue().GetName(), info);
             if (first) first = false;
             else discription.append("\n\n");
             discription.append(OpList.GetDescription(info, 0));

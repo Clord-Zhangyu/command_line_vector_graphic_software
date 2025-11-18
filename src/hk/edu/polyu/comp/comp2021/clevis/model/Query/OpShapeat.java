@@ -28,14 +28,13 @@ public class OpShapeat implements Query {
 
     @Override
     public QureyResult Execute() {
-        List<Map.Entry<String, Geometry>> entries = new ArrayList<>(Data.Geometries.entrySet());
-        ListIterator<Map.Entry<String, Geometry>> it = entries.listIterator(entries.size());
+        List<Map.Entry<Integer, Geometry>> entries = new ArrayList<>(Data.GeometryZOrder.entrySet());
+        ListIterator<Map.Entry<Integer, Geometry>> it = entries.listIterator(entries.size());
         while (it.hasPrevious()) {
-            Map.Entry<String, Geometry> entry = it.previous();
-            var res = entry.getValue().Contains(X, Y);
-            if (res) {
-                return new QureyResult(entry.getValue(), entry.getKey());
-            }
+            Map.Entry<Integer, Geometry> entry = it.previous();
+            entry.getValue().Contains(X, Y);
+            if (!entry.getValue().Contains(X, Y)) continue;
+            return new QureyResult(entry.getValue(), entry.getValue().GetName());
         }
         return new QureyResult(null, "No result");
     }

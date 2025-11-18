@@ -1,16 +1,19 @@
 package hk.edu.polyu.comp.comp2021.clevis.model.Geometry;
 
+import hk.edu.polyu.comp.comp2021.clevis.model.Data;
+
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 /**
  * The abstract class for all geometry
  */
-public abstract class Geometry {
+public abstract class Geometry implements Comparable<Geometry> {
     private Geometry Parent;
     private final String Name;
     private double X;
     private double Y;
+    private final int Z;
 
     /**
      * Super create for all geometry
@@ -23,6 +26,7 @@ public abstract class Geometry {
         Name = name;
         X = x;
         Y = y;
+        Z = Data.GetZCount();
     }
 
     /**
@@ -120,5 +124,17 @@ public abstract class Geometry {
      */
     public void SetY(double y) {
         this.Y = y;
+    }
+
+    /**
+     * @return get the ralative z-order of the geometry. This is not the real z-order.
+     */
+    public int getZ() {
+        return Z;
+    }
+
+    @Override
+    public int compareTo(Geometry other) {
+        return Integer.compare(other.getZ(),Z);
     }
 }

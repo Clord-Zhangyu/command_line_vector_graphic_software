@@ -8,7 +8,7 @@ import java.security.KeyException;
 /**
  * The base class for operations that creates geometry
  */
-public abstract class OpCreate implements Operation {
+public abstract class Create implements Operation {
 
     /**
      * the geometry created
@@ -19,9 +19,9 @@ public abstract class OpCreate implements Operation {
      * Construct a creation type operation to be executed
      *
      * @param geo the geometry that the operation creates
-     * @throws KeyException thrown when duplicate keys exists
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
-    protected OpCreate(Geometry geo) throws KeyException {
+    protected Create(Geometry geo) throws KeyException {
         if (Data.Geometries.containsKey(geo.GetName()))
             throw new KeyException("Key \"" + geo.GetName() + "\" already exists.");
         Geo = geo;
@@ -30,6 +30,7 @@ public abstract class OpCreate implements Operation {
     @Override
     public void Execute() {
         Data.Geometries.put(Geo.GetName(), Geo);
+        Data.GeometryZOrder.put(Geo.getZ(),Geo);
     }
 
     @Override

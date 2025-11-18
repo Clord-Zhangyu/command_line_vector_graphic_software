@@ -18,7 +18,7 @@ public class OpIntersect implements Query {
      *
      * @param name1 the name of the first geometry
      * @param name2 the name of the second geometry
-     * @throws KeyException thrown when duplicate keys exists
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
     public OpIntersect(String name1, String name2) throws KeyException {
         if (!Data.Geometries.containsKey(name1))

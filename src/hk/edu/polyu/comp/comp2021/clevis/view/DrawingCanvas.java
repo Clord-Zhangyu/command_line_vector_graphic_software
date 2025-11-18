@@ -257,6 +257,6 @@ public class DrawingCanvas extends JPanel {
      * @return the scale factor from pixels to model units (model units per pixel)
      */
     public double getPixelScale() {
-        return scale / PIXELS_PER_UNIT;
+        return scale * PIXELS_PER_UNIT;
     }
 }

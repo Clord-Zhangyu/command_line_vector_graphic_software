@@ -7,7 +7,7 @@ import java.security.KeyException;
 /**
  * The operation object for line command
  */
-public class OpLine extends OpCreate {
+public class OpLine extends Create {
 
     /**
      * Construct a line operation to be executed
@@ -17,7 +17,7 @@ public class OpLine extends OpCreate {
      * @param y1   the y cordinate of the first point
      * @param x2   the x cordinate of the second point
      * @param y2   the y cordinate of the second point
-     * @throws KeyException thrown when duplicate keys exists
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
     public OpLine(String name, double x1, double y1, double x2, double y2) throws KeyException {
         super(new GeoLine(name, x1, y1, x2, y2));

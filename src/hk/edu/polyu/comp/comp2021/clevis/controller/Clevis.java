@@ -81,6 +81,7 @@ public class Clevis {
     private static String HtmlDirectory;
     private static String TxtDirectory;
     private static boolean rerun = false;
+    private static long rerunDelay = 0;
 
     private static final HashMap<String, Constructor<?>> commandConstructors = new HashMap<>();
     private static final HashMap<String, Class<?>[]> commandParameters = new HashMap<>();
@@ -124,6 +125,15 @@ public class Clevis {
                         else
                             throw new InputMismatchException("Missing argument after -hist");
                         break;
+                    case "-rerun":
+                        if (index + 1 < args.length)
+                        {
+                            rerun = true;
+                            rerunDelay = Long.parseLong(args[index + 1]);
+                        }
+                        else
+                            throw new InputMismatchException("Missing argument after -rerun");
+                        break;
                     default:
                         throw new InputMismatchException("Unknown argument: " + args[index]);
                 }
@@ -136,7 +146,10 @@ public class Clevis {
                     var command = scanner.nextLine();
                     System.out.println(command);
                     commands.add(command);
-                    Execute(command);
+                    System.out.println(Execute(command));
+                    try {
+                        Thread.sleep(rerunDelay);
+                    } catch (InterruptedException ignored) {}
                 }
             }
             Log = new Logger(new FileWriter(HtmlDirectory), new FileWriter(TxtDirectory));
@@ -148,13 +161,15 @@ public class Clevis {
         } catch (IOException e) {
             System.err.println(e.getMessage());
             System.exit(1);
-        } catch (InputMismatchException e) {
-            System.out.print("""
-                    Correct format are as follows:
+        } catch (Exception e) {
+            System.err.print("""
+                    Input parameters are incorrect.
+                    The correct format and requirements are as follows:
                     -html your\\target\\address\\log.html
                     -txt your\\target\\address\\log.txt
-                    -eps <double> the persition
+                    -eps <double> the precision
                     -hist <int> the history length
+                    -rerun <long> enter rerun mode with a time gap between each command. -txt input is required.
                     """);
             System.exit(1);
         }
@@ -243,6 +258,7 @@ public class Clevis {
      * @param qr the query needs to be executed
      * @return the result of the query
      * @throws IllegalAccessException thrown when query is illegal
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
     public static Query.QureyResult RunQuery(Query qr) throws IllegalAccessException, KeyException {
         var res = qr.Execute();

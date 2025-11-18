@@ -2,6 +2,7 @@ package hk.edu.polyu.comp.comp2021.clevis.model.Geometry;
 
 import hk.edu.polyu.comp.comp2021.clevis.model.Data;
 
+import java.security.KeyException;
 import java.util.*;
 
 /**
@@ -16,26 +17,22 @@ public class GeoGroup extends Geometry {
      *
      * @param name       the name of the group
      * @param collection the collections contained in the group
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
-    public GeoGroup(String name, String[] collection) {
+    public GeoGroup(String name, String[] collection) throws KeyException {
         super(name, 0, 0);
-        Sons = new ArrayList<>();
-        var sortingHashset = new HashSet<String>();
+        var sorting = new ArrayList<Geometry>();
         for (var son : collection) {
             if (son.compareTo("") == 0) continue;
             if (!Data.Geometries.containsKey(son))
-                throw new RuntimeException("\"" + son + "\" does not exist.");
-            sortingHashset.add(son);
+                throw new KeyException("\"" + son + "\" does not exist.");
+            var geo = Data.Geometries.get(son);
+            if (geo.GetParent() != null) throw new KeyException("\"" + geo.GetName() + "\" unaccessible.");
+            sorting.add(geo);
         }
-        List<Map.Entry<String, Geometry>> entries = new ArrayList<>(Data.Geometries.entrySet());
-        ListIterator<Map.Entry<String, Geometry>> it = entries.listIterator(entries.size());
-        while (it.hasPrevious()) {
-            Map.Entry<String, Geometry> entry = it.previous();
-            if (sortingHashset.contains(entry.getKey()))
-                Sons.add(entry.getValue());
-        }
+        Collections.sort(sorting);
+        Sons = new ArrayList<>(sorting);
     }
-
     @Override
     public LinkedHashMap<String, Object> GetInfo() {
         var res = new LinkedHashMap<String, Object>();

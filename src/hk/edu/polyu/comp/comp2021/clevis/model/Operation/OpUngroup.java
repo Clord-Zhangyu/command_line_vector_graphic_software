@@ -15,7 +15,7 @@ public class OpUngroup implements Operation {
      * Construct an ungroup operation to be executed
      *
      * @param name name of the group
-     * @throws KeyException thrown when key is invalid
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
     public OpUngroup(String name) throws KeyException {
         if (!Data.Geometries.containsKey(name))
@@ -35,6 +35,7 @@ public class OpUngroup implements Operation {
             son.SetY(son.GetY() + Geo.GetY());
         }
         Data.Geometries.remove(Geo.GetName());
+        Data.GeometryZOrder.remove(Geo.getZ());
     }
 
     @Override
@@ -45,13 +46,11 @@ public class OpUngroup implements Operation {
             son.SetY(son.GetY() - Geo.GetY());
         }
         Data.Geometries.put(Geo.GetName(), Geo);
+        Data.GeometryZOrder.put(Geo.getZ(),Geo);
     }
 
     @Override
     public String GetCommand() {
-        StringBuilder command = new StringBuilder("ungroup " + Geo.GetName());
-        for (var son : Geo.GetSons())
-            command.append(" ").append(son.GetName());
-        return command.toString();
+        return "ungroup " + Geo.GetName();
     }
 }

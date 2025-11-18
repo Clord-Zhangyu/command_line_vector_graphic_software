@@ -18,7 +18,7 @@ public class OpList implements Query {
      * Contruct a list query to be executed
      *
      * @param name the name of the object
-     * @throws KeyException thrown when duplicate keys exists
+     * @throws KeyException thrown when duplicate or inaccessable keys exists
      */
     public OpList(String name) throws KeyException {
         if (!Data.Geometries.containsKey(name))
@@ -73,6 +73,6 @@ public class OpList implements Query {
 
     @Override
     public String GetCommand() {
-        return "list" + Geo.GetName();
+        return "list " + Geo.GetName();
     }
 }
