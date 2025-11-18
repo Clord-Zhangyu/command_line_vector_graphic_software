@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="GUI" type="Application" factoryName="Application" activateToolWindowBeforeRun="false">
+    <option name="ALTERNATIVE_JRE_PATH" value="ms-21" />
+    <option name="MAIN_CLASS_NAME" value="hk.edu.polyu.comp.comp2021.clevis.controller.GUI" />
+    <module name="Clevis" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

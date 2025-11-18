@@ -36,6 +36,7 @@ public abstract class Create implements Operation {
     @Override
     public void Recover() {
         Data.Geometries.remove(Geo.GetName());
+        Data.GeometryZOrder.remove(Geo.getZ());
     }
 }
 
